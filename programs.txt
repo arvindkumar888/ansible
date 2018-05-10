@@ -1,0 +1,403 @@
+DEVOPS =
+http://www.devopsschool.com/video/devops/DevOps-Essentials.html
+
+
+What is Ansible?
+	Configuration Managment tool
+	From Redhat
+
+What is Config mgmt?
+	SERVERS CONFIG MGMT
+
+What is there in the servers so can manage their config?
+
+	HYPERVIORS - HARDWARE
+		CPU
+		RAM
+		HDD
+	SOFTWARE
+		FILE
+		DIRECTORY
+		SERVICES
+		PACKAGE
+	PEOPLE
+		USER
+		GROUP
+	PROCESS
+		ACCESS
+		PERMISSION
+		POLICY
+
+Why Ansible?
+=========================================
+REASON 1 
+--------------------------
+	JAVA | C++
+	BASH | PS
+
+	JAVA, C++ -> DIFF TO LEARN, TEST, EXTEND, DEBUG, SHARE ===
+		ANSIBLE IS SIMPLE TO LEARN, TEST, EXTEND, DEBUG, SHARE 
+
+REASON 2
+--------------------------
+	BASH WILL WORK in WINDOWS???	NO 
+	PS Will work in lINX??		NO
+	
+	WE NEED TO TOOL WHICH CAN WORK IN CROSS PLATFORM?? - ANSIBLE
+
+REASON 3 
+--------------------------
+	Orchestration	
+	ABILITY TO MANAGE THE LARGE INFRA (SERVERS -- 100+)
+	ANSIBLE
+
+REASON 4 
+--------------------------
+	SAVING TIME 
+	DEPLOY.SH --> 200 BOX ( 200 X 20) = 4000 MINS
+	GSH --> DEPLOY.SH --> 200 BOX ( 20 ) = 20 mins
+	http://www.scmgalaxy.com/tutorials/gsh-run-linux-commands-on-many-other-linux-server-at-once/
+
+	IDEMPOTENT
+
+	DESIRE  ===> ACTUAL
+	SCRIPT  ===> SERVERS 
+		
+	YES | NO
+
+
+What are the competetors of Ansible
+CHEF
+Puppet
+Salt
+
+Ansible release
+	Open Source 
+		Ansible
+	Properity 
+		Tower
+
+Chef	
+	Chef-server	COMMAND-LINE
+	Chef-manage	GUI
+Puppet 
+	Puppet Server	COMMAND-LINE
+	Puppet Ent	GUI
+	
+How???
+
+Roles in Ansble?
+	Ansible Programmer  ----> TODAY - TOMO HALF
+	Ansible Administrator ---> TOMO SECOND - Third - Admin
+
+What can you do with Ansible?
+	IT work -
+	SDLC work - 
+
+How to become a programmers?
+JAVA -> JDK   -> JAVA(methods) -> JAR -> QA
+	Code Analysis
+	UNIT TESTING - JUNIT
+	AT  - Selenium
+Ansible -> ansible -> playbook(plays) --> modules --> Ansible Admin
+	Code Analysi	
+	UNit TEST
+	Accept T
+	
+=======================
+Mode of executions 
+	LOCAL ---> SAME MACHINE
+	REMOTE -> OTHER SERVERS
+
+DESIRE STATE == ACTUAL STATE
+
+- Commands
+- Yaml
+
+Core Modules
+Resources(Modules)	STATE(ATTRIBUTES)		ACTION
+=================================================
+file			MODE| PER			CREATE | D | U	
+directory		
+package							I R U
+services						E D S S R
+yum
+apt
+=====================================================================
+
+What are the core Modules?
+http://docs.ansible.com/ansible/latest/modules/list_of_all_modules.html
+
+What are the custom modules?
+https://galaxy.ansible.com/
+
+Lets Create Pseucode
+===============================
+Create a file with 755				DONE
+Create a file with 755 with ec2-user		DONE
+create direc					DONE
+
+install a package called "httpd"		DONE
+start a services
+copy the a file "index.html" into /var/www/html
+
+
+
+How to install Ansible?
+> yum install wget -y
+> wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+> sudo rpm -i epel-release-latest-7.noarch.rpm
+> sudo yum update -y 
+> sudo yum install ansible -y
+
+How to verify?
+> ansible
+> ansible --version
+
+
+MODULE NAME - file
+
+Ansible - tool
+127.0.0.1 - IP address of localhost
+-m module name
+-a "parameters to modules"
+
+ansible 127.0.0.1 -m file -a "dest=/opt/a.txt mode=600 state=touch"
+ansible 127.0.0.1 -m file -a "dest=/opt/a.txt mode=600 state=absent"
+ansible 127.0.0.1 -m file -a "dest=/opt/a.txt mode=600 state=touch"
+ansible 127.0.0.1 -m file -a "dest=/opt/a.txt mode=600 state=touch owner=ec2-user"
+ansible 127.0.0.1 -m file -a "dest=/opt/b.txt mode=755 state=touch owner=ec2-user"
+ansible 127.0.0.1 -m file -a "dest=/opt/c.txt mode=755 state=touch owner=ec2-user"
+ansible 127.0.0.1 -m file -a "dest=/opt/bmc.txt mode=755 owner=ec2-user"
+ansible 127.0.0.1 -m file -a "dest=/opt/2 mode=600 state=directory"
+ansible localhost -m file -a "dest=/opt/bmcdir mode=755 owner=ec2-user group=ec2-user state=directory"
+
+ansible 127.0.0.1 -m yum -a "name=httpd state=present"
+ansible 127.0.0.1 -m yum -a "name=httpd state=absent"
+
+==================IMPORTANT CONCEPT===============
+CAN NOT DO UNDO & REVERT
+
+ansible 127.0.0.1 -m service -a "name=httpd state=started"
+ansible 127.0.0.1 -m service -a "name=httpd state=stopped"
+ansible 127.0.0.1 -m copy -a "src=/root/ansible/index.html dest=/var/www/html/index.html mode=600"
+ansible 127.0.0.1 -m copy -a "src: /srv/myfiles/foo.conf dest: /etc/foo.conf"
+
+
+==============================================================
+How to Execute Adhoc Commands in One Remote Machine?
+CONTROLS SERVER - MASTER	35.154.224.26	ec2-35-154-224-26.ap-south-1.compute.amazonaws.com
+REMOTE SERVER - SLAVE		13.126.172.45	ec2-13-126-172-45.ap-south-1.compute.amazonaws.com
+
+
+ansible all -i 13.126.172.45, -m setup --key-file=remote-access.pem -u ec2-user
+ansible all -i 13.126.172.45, -m file -a "dest=/opt/a.txt mode=600 state=touch" --key-file=remote-access.pem -u ec2-user
+ansible all -i 13.126.172.45, -m file -a "dest=/opt/a.txt mode=600 state=touch" --key-file=remote-access.pem -u ec2-user -b
+
+ansible all -i 13.126.172.45, -m yum -a "name=httpd state=present" --key-file=remote-access.pem -u ec2-user -b
+ansible all -i 13.126.172.45, -m service -a "name=httpd state=started" --key-file=remote-access.pem -u ec2-user -b
+ansible all -i 13.126.172.45, -m copy -a "src=/root/index.html dest=/var/www/html/index.html mode=600" --key-file=remote-access.pem -u ec2-user -b
+
+LAB - EXEERCISE
+[ec2-user@ip-172-31-10-233 opt]$ chown apache:apache /var/www/html/index.html
+chown: changing ownership of ‘/var/www/html/index.html’: Operation not permitted
+[ec2-user@ip-172-31-10-233 opt]$ sudo chown apache:apache /var/www/html/index.html
+
+
+What is Setup? - DONE
+What is fact? - DONE
+
+
+How CONTROLS SERVER authenticate to REMOTE SERVER?
+Answer - SSH
+METHOD 1 - PASSWORD
+METHOD 2 - KEY
+	   --- PASS the key
+	   --- ssh-add
+METHOD 2 - KEYBROS
+
+
+
+How to execute Adhoc Commands in multiple Remote machine using "INVENTORY"?
+
+ansible all -i inventory -m setup --key-file=remote-access.pem -u ec2-user
+
+ansible all -i inventory  -m yum -a "name=httpd state=present" --key-file=remote-access.pem -u ec2-user -b
+ansible all -i inventory  -m service -a "name=httpd state=started" --key-file=remote-access.pem -u ec2-user -b
+ansible all -i inventory  -m copy -a "src=/root/index.html dest=/var/www/html/index.html mode=644" --key-file=remote-access.pem -u ec2-user -b
+
+
+Deep Dive Into Inventory  - DONE
+
+
+What is PLAY?			DONE
+
+What is PLAYBOOK?	DONE
+
+How to write? 		DONE
+
+
+Variable IN ANSIBLE		DONE
+- USER DEFINED VARIBLES
+	inventory
+	group
+	Group of Group
+	Playbooks
+- FIXED(FACT)
+	BEHAIOURAL PARAMETERES VAR - Inventory
+	Remote hosts
+
+How to use it?
+{{ var_name }}
+
+
+LOOPING in Ansible		??
+
+  - name: Install common software requirements
+    yum: pkg={{ item }} state=installed
+    with_items:
+     - git
+     - ntp
+     - vim
+
+
+     
+
+CONDITIONS in ANSIBLE		??
+
+  - name: Creating a file
+    file: path=/opt/verizon.txt state=touch
+    when:
+      - ansible_distribution == "RedHat"
+      - ansible_distribution_major_version == "7.5"
+
+
+======================Ansible Register variable===================
+
+- hosts: all
+  tasks:
+  - name: Ansible register variable basic example
+    shell: "find *.txt"
+    args:
+      chdir: "/opt/"
+    register: find_output
+
+  - debug:
+      var: find_output
+
+EXAMPLE 2
+=============================
+- hosts: all
+  tasks:
+  - name: Ansible register with_items example
+    shell: "find *.txt"
+    args:
+      chdir: "/opt/"
+    register: with_output
+
+  - shell: "cp {{ item }} {{item}}_bkp"
+    with_items:
+      - "{{ with_output.stdout_lines }}"
+
+
+======================Ansible Handlers variable===================
+---
+- hosts: webservers
+  sudo: yes
+  vars:
+    http_port: 80
+    doc_dir: /ansible/
+    doc_root: /var/www/html/ansible/
+    max_clients: 5
+
+  vars_prompt:
+    - name: username
+      prompt:  What is your name?  What is your Quest?  What is your fav color?
+
+  tasks:
+  - name: Ensure that Apache is installed
+    yum: name=httpd state=present
+    when: ansible_os_family == "RedHat"
+
+  - name: Start Apache Services
+    service: name=httpd enabled=yes state=started
+
+  - name: Deploy configuration File
+    template: src=templates/httpd.j2 dest=/etc/httpd/conf/httpd.conf
+    notify:
+      - Restart Apache
+
+  - name: Copy Site Files
+    template: src=templates/index.j2 dest={{ doc_root }}/index.html
+
+  handlers:
+     - name: Restart Apache
+       service: name=httpd state=restarted
+
+
+=================================================
+- hosts: all
+  gather_facts: False
+  vars_prompt:
+    - name: "Version"
+      prompt: "Which version Do you want to install?"
+
+  tasks:
+    - name: Ansible prompt example.
+      debug:
+        msg: "{{ Version }}"
+==========================================
+
+REGISTER ON GITHUB.COM
+
+COPY ALL PROGRAMS INTO ONE DIRECTORY....
+
+> yum install git
+> git init
+> git config user.name "YOUR NAME"
+> git config user.name "YOUR EMAIL ADDRESS"
+> git add .					REPEAT
+> git commit -m"Adding my backp"		REPEAT		
+> git push HTTP-URL master			REPEAT
+	
+
+===========================Ansible Include=========================================
+
+file1.yaml
+file2.yaml
+file3.yaml
+
+file1.yaml
+	include file2.yaml
+	include file3.yaml
+========================================
+#common.yml
+- name: Check PID of existing Java process
+  shell: "ps -ef | grep [j]ava"
+  register: java_status
+
+  - debug: var=java_status.stdout
+========================================
+#main.yaml
+---
+- hosts: all
+  gather_facts: no
+
+  tasks:
+    - include common.yml
+========================================
+#second.yml
+---
+- hosts: instance_1
+  gather_facts: no
+
+  tasks:
+    - include: common.yml
+
+	
+
+
+	
+
+
+
